@@ -20,23 +20,26 @@ class App extends React.Component {
     }
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
-        
+
     }
     validate() {
-        //for fio
-        var fio = document.getElementById('fio');
+        const fio = document.getElementById('fio'),
+              email = document.getElementById('email'),
+              phone = document.getElementById('phone');
         //reset class
         fio.className='form-control';
-
-        // if ( wordsQuantity !== 3 ) {
-        //     this.setState({status: 'error'})
-        // } else this.setState({status: 'success'});
-        var wordsQuantity = fio.value.match(/\S+/g).length;
+        email.className='form-control';
+        phone.className='form-control';
+        //check fio
+        let wordsQuantity = fio.value.match(/\S+/g).length;
         if ( wordsQuantity !== 3 ) {
-            document.getElementById('fio').className += ' error';
+            fio.className += ' error';
         }
-
         //check email
+        let regexp = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))(@ya)(?=.ru)|(@yandex)(?=.(ru|kz|ua|by|com)).(ru|kz|ua|by|com)(?![A-Za-z^<>()\[\]\\.,;:@/"])/g;
+        if( !email.value.match(regexp) ) {
+            email.className += ' error';
+        }
     }
     fioKeyUp(e) {
         e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Za-яА-Я\s@]+/, '');
