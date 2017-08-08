@@ -1,4 +1,5 @@
 import React from 'react';
+import MaskedInput from 'react-maskedinput';
 import './App.css';
 
 class App extends React.Component {
@@ -13,15 +14,15 @@ class App extends React.Component {
         this.submit = this.submit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
-
-
     submit(e) {
         e.preventDefault();
+        if( this.state.fio === '') {
+
+        }
         console.log(this.state.fio);
         console.log(this.state.email);
         console.log(this.state.phone);
     }
-
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
     }
@@ -29,13 +30,19 @@ class App extends React.Component {
 
     render() {
         const { name, email, phone } = this.state;
-
         const resultContainer = (
-            <div className="resultContainer alert alert-success">
-                <strong>Success!</strong>
+            <div>
+                <div className="resultContainer alert alert-success">
+                    <strong>Success!</strong>
+                </div>
+                <div className="resultContainer alert alert-danger">
+                    <strong>Error!</strong>
+                </div>
+                <div className="resultContainer alert alert-warning">
+                    <strong>Warning!</strong>
+                </div>
             </div>
         )
-
         return (
             <form className="col-sm-3 panel" onSubmit={this.submit}>
                 {resultContainer}
@@ -49,10 +56,9 @@ class App extends React.Component {
                 </div>
                 <div className="form-group has-error">
                     <label for="formGroupExampleInput2">Телефон</label>
-                    <input type="text" name="phone" className="form-control" id="formGroupExampleInput2" value={this.state.phone} onChange={this.handleChange} placeholder="Введите номер"/>
+                    <MaskedInput mask="+7(111)111-11-11" type="text" name="phone" className="form-control" id="formGroupExampleInput2" value={this.state.phone} onChange={this.handleChange} placeholder="Введите номер"/>
                 </div>
                 <input type="submit" id="submitButton" value="Submit" className="btn btn-primary"/>
-
             </form>
         );
     }

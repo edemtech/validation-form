@@ -4,7 +4,8 @@
   "author": "Gryukachev Edward",
   "dependencies": {
     "react": "^15.5.3",
-    "react-dom": "^15.5.3"
+    "react-dom": "^15.5.3",
+    "react-maskedinput": "^4.0.0"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
