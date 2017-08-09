@@ -26,20 +26,21 @@ class App extends React.Component {
         const fio = document.getElementById('fio'),
               email = document.getElementById('email'),
               phone = document.getElementById('phone');
-        //reset class
-        fio.className='form-control';
-        email.className='form-control';
-        phone.className='form-control';
-        //check fio
-        let wordsQuantity = fio.value.match(/\S+/g).length;
-        if ( wordsQuantity !== 3 ) {
-            fio.className += ' error';
+        //validate fio
+        const quantityWords = fio.value.match(/\S+/g).length;
+        quantityWords !== 3 ? fio.className += ' error' : fio.className='form-control';
+        //validate email
+        const regexp = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))(@ya)(?=.ru)|(@yandex)(?=.(ru|kz|ua|by|com)).(ru|kz|ua|by|com)(?![A-Za-z^<>()\[\]\\.,;:@\"])/g;
+        !email.value.match(regexp) ? email.className += ' error' : email.className='form-control';
+        //validate phone
+        let str = phone.value.match(/\d+/g, "")+'',
+            s = str.split(',').join(''),
+            phoneNumberSum = 0;
+        for ( let item of s ) {
+            phoneNumberSum += Number(item);
         }
-        //check email
-        let regexp = /(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))(@ya)(?=.ru)|(@yandex)(?=.(ru|kz|ua|by|com)).(ru|kz|ua|by|com)(?![A-Za-z^<>()\[\]\\.,;:@/"])/g;
-        if( !email.value.match(regexp) ) {
-            email.className += ' error';
-        }
+        phoneNumberSum > 30 ? phone.className += ' error' : phone.className='form-control';
+
     }
     fioKeyUp(e) {
         e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Za-яА-Я\s@]+/, '');
@@ -51,8 +52,7 @@ class App extends React.Component {
             this.state.status === 'success' ?
                 <div className="alert alert-success">
                     <strong>Success</strong>
-                </div>
-                : this.state.status === 'error' ?
+                </div> : this.state.status === 'error' ?
                     <div className="alert alert-danger">
                         <strong>Error</strong>
                     </div> : this.state.status === 'progress' ?
