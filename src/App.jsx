@@ -12,6 +12,7 @@ class App extends React.Component {
             phone: '',
             errorFields: [],
             status: '',
+            reason: ''
         }
         window.MyForm = this;
         this.submit = this.submit.bind(this);
@@ -40,7 +41,7 @@ class App extends React.Component {
         let obj = {}
     }
     setData(obj) {
-
+        console.log('aaa');
     }
     handleChange(e) {
         this.setState({[e.target.name]: e.target.value});
@@ -51,15 +52,20 @@ class App extends React.Component {
         this.setState({errorFields: validate.errorFields})
         if ( validate.isValid ) {
             document.getElementById('submitButton').setAttribute('disabled', 'disabled');
-            fetch(e.currentTarget.action)
-                .then( response => {
-                    return response.json();
-                })
-                .then( json => {
-                    console.log(json);
-                    this.setState({status: json.status})
-                });
+            this.sendRequest(e.currentTarget.action);
         }
+    }
+    sendRequest(url){
+        fetch(url)
+            .then( response => {
+                return response.json();
+            })
+            .then( json => {
+                this.setState({status: json.status, reason: json.reason});
+                if( json.status=="progress" ){
+                    setTimeout( () => { this.sendRequest(url) } , Number(json.timeout) );
+                }
+            });
     }
     fioKeyUp(e) {
         e.currentTarget.value = e.currentTarget.value.replace(/[^a-zA-Za-яА-Я\s@]+/, '');
@@ -73,14 +79,14 @@ class App extends React.Component {
                     <strong>Success</strong>
                 </div> : this.state.status === 'error' ?
                     <div className="alert alert-danger">
-                        <strong>Error</strong>
+                        <strong>Error. Reason:{this.state.reason}</strong>
                     </div> : this.state.status === 'progress' ?
                         <div className="alert alert-warning">
                             <strong>In progress..</strong>
                         </div> : ''
         )
         return (
-            <form className="col-sm-3 panel" action="error.json" onSubmit={this.submit}>
+            <form className="col-sm-3 panel" action="progress.json" onSubmit={this.submit}>
                 <div id="resultContainer">
                     {resultContainer}
                 </div>
